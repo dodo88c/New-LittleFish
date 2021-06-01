@@ -62,6 +62,7 @@ namespace New_LittleFish
 
 
         bool select = false;
+        bool vas_y = false;
         int A_old;
         int B_old;
 
@@ -81,7 +82,7 @@ namespace New_LittleFish
                 int B = pion_blanc.IndexOf((case_x, case_y));
 
 
-                if ((A != -1 || B != -1 ) && select == false )
+                if ((A != -1 || B != -1 ) && select == false ) // selection d'un pion, sur une case non-vide
                 {
                     A_old = A;
                     B_old = B;
@@ -90,20 +91,37 @@ namespace New_LittleFish
                     select = true;
                     this.Refresh();
                 }
-
-                if ((A == -1 && B == -1) && select == true)
+                else if ((A == -1 && B == -1) && select == true) // selection case d'arivée, sur case vide
                 {
+                    vas_y = false;
+                    vas_y = testmethod(case_x, case_y);
 
-                    if (A_old == -1)
-                        pion_blanc[B_old] = (case_x, case_y);
-                    if (B_old == -1)
-                        pion_noir[A_old] = (case_x, case_y);
+                    if ( vas_y == true)
+                    {
+                        if (A_old == -1)
+                            pion_blanc[B_old] = (case_x, case_y);
+                        if (B_old == -1)
+                            pion_noir[A_old] = (case_x, case_y);
 
+                        select_pion = (0, 0);
+                        select = false;
+                        this.Refresh();
+                    }
+                    else
+                    {
+                        select_pion = (0, 0);
+                        select = false;
+                        this.Refresh();
+                    }
 
-                    select_pion = (0, 0);
+                }
+                else // annule déplacement, si re-clique sur case ocuppée.
+                {
+                    select_pion = (0,0);
                     select = false;
                     this.Refresh();
                 }
+
 
 
             }
@@ -111,6 +129,20 @@ namespace New_LittleFish
             
 
         }
+
+        private bool testmethod(int x, int y)
+        {
+
+            if (x % 2 == 0)
+                vas_y = y % 2 != 0 ? true : false;
+            else
+                vas_y = y % 2 != 0 ? false : true;
+
+
+            return vas_y;
+
+        }
+
 
 
 
