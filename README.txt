@@ -23,13 +23,16 @@ C'est un programme de jeu de Dame graphique en C# , avec reprise de l'IA d'origi
 	Début du projet. Création d'une interface, du plateau, des pions, du déplacement.
 	
 	1 ere règle: selection d'un pion qui existe, et le poser sur une case vide.
-	2 eme règle: déplacement uniquement sur des cases noires
+	2 eme règle: déplacement uniquement sur des cases noires.
 
 	4 heures de développement.
 
 
 
 
+02/06/2021 : 
+	
+	3 eme règle: obligation de manger quand c'est possible (avec le pion selectionné).
+	4 eme règle: possible de manger en avant, et en arriere. 
 
-
-
+	2 heures de développement.
