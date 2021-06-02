@@ -36,3 +36,13 @@ C'est un programme de jeu de Dame graphique en C# , avec reprise de l'IA d'origi
 	4 eme règle: possible de manger en avant, et en arriere. 
 
 	2 heures de développement.
+
+
+
+
+03/06/2021 :
+	Ajout équipe, et changement d'équipe.
+	détection de pion mangé, supression.
+	Compteur de pion restant.
+
+	1 heure de développement.
