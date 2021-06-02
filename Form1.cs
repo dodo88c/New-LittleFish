@@ -19,6 +19,13 @@ namespace New_LittleFish
         }
 
 
+
+        /// 
+        /// //////////////////////  VARIABLES
+        /// 
+
+
+
         const int taille_case = 60;
         const int taille_grille = 10;
         Color clr1 = Color.DarkGray;
@@ -28,6 +35,16 @@ namespace New_LittleFish
         List<(int x, int y)> pion_blanc = new List<(int x, int y)>();
 
         (int x ,int y ) select_pion = (0,0) ;
+
+
+
+
+
+
+
+        /// 
+        /// //////////////////////  INITIALISATION
+        /// 
 
 
 
@@ -61,8 +78,17 @@ namespace New_LittleFish
 
 
 
+
+
+        /// 
+        /// //////////////////////  CLICK SUR LE DAMIER
+        /// 
+
+
+
         bool select = false;
         bool vas_y = false;
+        bool manger = false;
         int A_old;
         int B_old;
 
@@ -87,14 +113,23 @@ namespace New_LittleFish
                     A_old = A;
                     B_old = B;
 
+                    if (A_old == -1) equipe = 0;
+                    if (B_old == -1) equipe = 1;
+
                     select_pion = (case_x, case_y);
                     select = true;
                     this.Refresh();
                 }
                 else if ((A == -1 && B == -1) && select == true) // selection case d'arivée, sur case vide
                 {
+
+
                     vas_y = false;
-                    vas_y = testmethod(case_x, case_y);
+                    manger = false;
+                    vas_y = verif_case_noire(case_x, case_y);
+                    manger = verif_manger(case_x, case_y); 
+                    vas_y = verif_deplacement(case_x, case_y);
+
 
                     if ( vas_y == true)
                     {
@@ -102,6 +137,7 @@ namespace New_LittleFish
                             pion_blanc[B_old] = (case_x, case_y);
                         if (B_old == -1)
                             pion_noir[A_old] = (case_x, case_y);
+
 
                         select_pion = (0, 0);
                         select = false;
@@ -130,7 +166,25 @@ namespace New_LittleFish
 
         }
 
-        private bool testmethod(int x, int y)
+        private void Form1_MouseMove(object sender, MouseEventArgs e)
+        {
+            souris_x = e.X;
+            souris_y = e.Y;
+        }
+
+
+
+
+
+
+        /// 
+        /// //////////////////////  LOGIQUE INTERNE
+        /// 
+
+        int equipe = 0; // 0 = blanc, 1 = noir.
+
+
+        private bool verif_case_noire(int x, int y)  // retourne si la destination est une case noire
         {
 
             if (x % 2 == 0)
@@ -138,15 +192,104 @@ namespace New_LittleFish
             else
                 vas_y = y % 2 != 0 ? false : true;
 
-
             return vas_y;
 
         }
 
+        
+
+        private bool verif_deplacement(int x, int y)  // retourne si la le déplacement est correct
+        {
+            bool go = false;
+
+            if (manger == false) // deplacement simple
+            {
+
+                if (equipe == 1)  // si l'équipe est noire
+                {
+                    if (y == select_pion.y + 1 && (x == select_pion.x - 1 || x == select_pion.x + 1)) // si la case d'arrivée est valide
+                        go = true;
+                    else
+                        go = false;
+                }
+
+                if (equipe == 0)  // si l'équipe est blanc
+                {
+                    if (y == select_pion.y - 1 && (x == select_pion.x - 1 || x == select_pion.x + 1)) // si la case d'arrivée est valide
+                        go = true;
+                    else
+                        go = false;
+                }
+            }
+
+            if (manger == true) // deplacement complexe
+            {
+                if (equipe == 1)  // si l'équipe est noire
+                {
+                    if ( (y == select_pion.y + 2 || y == select_pion.y - 2 ) && (x == select_pion.x - 2 || x == select_pion.x + 2)) // si la case d'arrivée est valide
+                        go = true;
+                    else
+                        go = false;
+                }
+
+                if (equipe == 0)  // si l'équipe est blanc
+                {
+                    if ( (y == select_pion.y + 2 || y == select_pion.y - 2) && (x == select_pion.x - 2 || x == select_pion.x + 2)) // si la case d'arrivée est valide
+                        go = true;
+                    else
+                        go = false;
+                }
+            }
 
 
+                return go;
+
+        }
 
 
+        private bool verif_manger(int x, int y)  // regarde et élimine un pion mangé
+        {
+            bool miam = false;
+
+            if (equipe == 0) // blanc
+            {
+                int exist1 = pion_noir.IndexOf((select_pion.x + 1, select_pion.y + 1)); // mange derriere droite
+                int exist2 = pion_noir.IndexOf((select_pion.x + 1, select_pion.y - 1)); // mange  gauche
+                int exist3 = pion_noir.IndexOf((select_pion.x - 1, select_pion.y + 1)); // mange avant droite
+                int exist4 = pion_noir.IndexOf((select_pion.x - 1, select_pion.y - 1)); // mange avant gauche
+
+                int vide1 = pion_noir.IndexOf((select_pion.x + 2, select_pion.y + 2)) + pion_blanc.IndexOf((select_pion.x + 2, select_pion.y + 2));
+                int vide2 = pion_noir.IndexOf((select_pion.x + 2, select_pion.y - 2)) + pion_blanc.IndexOf((select_pion.x + 2, select_pion.y - 2)); 
+                int vide3 = pion_noir.IndexOf((select_pion.x - 2, select_pion.y + 2)) + pion_blanc.IndexOf((select_pion.x - 2, select_pion.y + 2));
+                int vide4 = pion_noir.IndexOf((select_pion.x - 2, select_pion.y - 2)) + pion_blanc.IndexOf((select_pion.x - 2, select_pion.y - 2)); 
+
+
+                if ( (exist1 != -1 && vide1 == -2) || (exist2 != -1 && vide2 == -2) || (exist3 != -1 && vide3 == -2) || (exist4 != -1 && vide4 == -2))
+                    miam = true;
+            }
+
+            if (equipe == 1) // noir
+            {
+                int exist1 = pion_blanc.IndexOf((select_pion.x + 1, select_pion.y + 1)); // mange avant droite
+                int exist2 = pion_blanc.IndexOf((select_pion.x + 1, select_pion.y - 1)); // mange avant gauche
+                int exist3 = pion_blanc.IndexOf((select_pion.x - 1, select_pion.y + 1)); // mange derriere droite
+                int exist4 = pion_blanc.IndexOf((select_pion.x - 1, select_pion.y - 1)); // mange derriere gauche
+
+                int vide1 = pion_noir.IndexOf((select_pion.x + 2, select_pion.y + 2)) + pion_blanc.IndexOf((select_pion.x + 2, select_pion.y + 2));
+                int vide2 = pion_noir.IndexOf((select_pion.x + 2, select_pion.y - 2)) + pion_blanc.IndexOf((select_pion.x + 2, select_pion.y - 2));
+                int vide3 = pion_noir.IndexOf((select_pion.x - 2, select_pion.y + 2)) + pion_blanc.IndexOf((select_pion.x - 2, select_pion.y + 2));
+                int vide4 = pion_noir.IndexOf((select_pion.x - 2, select_pion.y - 2)) + pion_blanc.IndexOf((select_pion.x - 2, select_pion.y - 2));
+
+                if ((exist1 != -1 && vide1 == -2) || (exist2 != -1 && vide2 == -2) || (exist3 != -1 && vide3 == -2) || (exist4 != -1 && vide4 == -2))
+                    miam = true;
+            }
+
+            return miam;
+        }
+
+        /// 
+        /// //////////////////////  GRAPHIQUE
+        /// 
 
         private void Form1_Paint(object sender, PaintEventArgs e)
         {
@@ -214,11 +357,17 @@ namespace New_LittleFish
 
         }
 
-        private void Form1_MouseMove(object sender, MouseEventArgs e)
-        {
-            souris_x = e.X;
-            souris_y = e.Y;
-        }
+
+
+
+
+
+
+
+
+
+
+
     }
 
 
