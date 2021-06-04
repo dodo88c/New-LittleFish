@@ -53,7 +53,7 @@ namespace New_LittleFish
 
             pion_blanc.Clear();
             pion_noir.Clear();
-
+            C_a_qui = 0;
 
             for (var n = 0; n < taille_grille; n++) // genere les lignes
             {
@@ -76,6 +76,10 @@ namespace New_LittleFish
 
                 }
             }
+
+            Joue_un_coup();
+
+
         }
 
 
@@ -98,79 +102,92 @@ namespace New_LittleFish
         int souris_y;
 
         private void Form1_Click(object sender, EventArgs e)
-        {            
-            
-            if (souris_x < (taille_grille * taille_case) && souris_y < (taille_grille * taille_case) )
+        {
+
+            if (equipe_IA != C_a_qui)
             {
-                int case_x = (int)souris_x / taille_case,
-                    case_y = (int)souris_y / taille_case;
 
-                
-                int A = pion_noir.IndexOf((case_x,case_y));
-                int B = pion_blanc.IndexOf((case_x, case_y));
-
-
-                if ((A != -1 || B != -1 ) && select == false ) // selection d'un pion, sur une case non-vide
+                if (souris_x < (taille_grille * taille_case) && souris_y < (taille_grille * taille_case))
                 {
-                    A_old = A;
-                    B_old = B;
-
-                    if (A_old == -1) equipe = 0;
-                    if (B_old == -1) equipe = 1;
-
-                    select_pion = (case_x, case_y);
-                    select = true;
-                    this.Refresh();
-                }
-                else if ((A == -1 && B == -1) && select == true) // selection case d'arivée, sur case vide
-                {
+                    int case_x = (int)souris_x / taille_case,
+                        case_y = (int)souris_y / taille_case;
 
 
-                    vas_y = false;
-                    manger = false;
-                    vas_y = verif_case_noire(case_x, case_y);
-                    manger = verif_manger(case_x, case_y); 
-                    vas_y = verif_deplacement(case_x, case_y);
+                    int A = pion_noir.IndexOf((case_x, case_y));
+                    int B = pion_blanc.IndexOf((case_x, case_y));
 
 
-                    if ( vas_y == true)
+                    if ((A != -1 || B != -1) && select == false) // selection d'un pion, sur une case non-vide
                     {
-                        if (A_old == -1)
-                            pion_blanc[B_old] = (case_x, case_y);
-                        if (B_old == -1)
-                            pion_noir[A_old] = (case_x, case_y);
+                        A_old = A;
+                        B_old = B;
+
+                        if (A_old == -1) equipe = 0;
+                        if (B_old == -1) equipe = 1;
+
+                        select_pion = (case_x, case_y);
+                        select = true;
+                        this.Refresh();
+                    }
+                    else if ((A == -1 && B == -1) && select == true) // selection case d'arivée, sur case vide
+                    {
 
 
-                        select_pion = (0, 0);
-
-
-                        select = false;
+                        vas_y = false;
                         manger = false;
-                        this.Refresh();
+                        vas_y = verif_case_noire(case_x, case_y);
+                        manger = verif_manger(case_x, case_y);
+                        vas_y = verif_deplacement(case_x, case_y);
+
+
+                        if (vas_y == true)
+                        {
+                            if (A_old == -1)
+                                pion_blanc[B_old] = (case_x, case_y);
+                            if (B_old == -1)
+                                pion_noir[A_old] = (case_x, case_y);
+
+
+                            select_pion = (0, 0);
+
+
+                            select = false;
+                            manger = false;
+                            this.Refresh();
+                            C_a_qui = equipe_IA;
+                            Joue_un_coup();
+
+                        }
+                        else
+                        {
+                            select_pion = (0, 0);
+                            select = false;
+                            this.Refresh();
+                        }
 
                     }
-                    else
+                    else // annule déplacement, si re-clique sur case ocuppée.
                     {
                         select_pion = (0, 0);
                         select = false;
                         this.Refresh();
                     }
 
+
+
                 }
-                else // annule déplacement, si re-clique sur case ocuppée.
-                {
-                    select_pion = (0,0);
-                    select = false;
-                    this.Refresh();
-                }
-
-
-
             }
 
-            
+
+            Joue_un_coup();
+
+
+
 
         }
+
+
+
 
         private void Form1_MouseMove(object sender, MouseEventArgs e)
         {
@@ -250,6 +267,11 @@ namespace New_LittleFish
                 e.Graphics.DrawEllipse(p, r);
 
             }
+
+            
+            
+            textBox1.Text = pion_noir.Count.ToString();
+            textBox2.Text = pion_blanc.Count.ToString();
 
 
 

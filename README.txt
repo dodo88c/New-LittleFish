@@ -46,3 +46,12 @@ C'est un programme de jeu de Dame graphique en C# , avec reprise de l'IA d'origi
 	Compteur de pion restant.
 
 	1 heure de développement.
+
+
+
+04/06/2021 : 
+	Ajout début joueur IA
+	
+	corretion bug
+
+	1 heure de développement.
