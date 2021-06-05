@@ -40,7 +40,7 @@ namespace New_LittleFish
 
             if (equipe_IA == C_a_qui)
             {
-                if( equipe_IA == 0)
+                if (equipe_IA == 0)
                 {
                     pion_IA = pion_blanc;
                     pion_adv = pion_noir;
@@ -52,57 +52,78 @@ namespace New_LittleFish
                 }
 
 
-                prochain_coup();
 
-
-
-                meilleur = (-1, 0, 0, 0, 0, false);
-
-                foreach ((int poids, int x, int y, int dir_vert, int dir_hor, bool mange) coup in list_coup_a_jouer)
+                do
                 {
-                    if (coup.poids >= meilleur.poids)
-                        meilleur = coup;
+
+                    list_coup_a_jouer.Clear();
+
+
+                    prochain_coup();
+
+
+
+
+
+
+
+                    meilleur = (-1, 0, 0, 0, 0, false);
+
+                    foreach ((int poids, int x, int y, int dir_vert, int dir_hor, bool mange) coup in list_coup_a_jouer)
+                    {
+                        if (coup.poids >= meilleur.poids)
+                            meilleur = coup;
+                    }
+
+
+                    (int x, int y) origine = (meilleur.x, meilleur.y);
+                    destination = (0, 0);
+
+
+                    if (meilleur.mange == false)
+                    {
+                        destination = (meilleur.x + 1, meilleur.y + 1);
+
+                        if (meilleur.dir_vert == 0)
+                            destination.y = meilleur.y - 1;
+                        if (meilleur.dir_hor == 0)
+                            destination.x = meilleur.x - 1;
+                    }
+                    if (meilleur.mange == true)
+                    {
+                        destination = (meilleur.x + 2, meilleur.y + 2);
+
+                        if (meilleur.dir_vert == 0)
+                            destination.y = meilleur.y - 2;
+                        if (meilleur.dir_hor == 0)
+                            destination.x = meilleur.x - 2;
+
+
+                        if (meilleur.dir_vert == 0 && meilleur.dir_hor == 0)
+                            pion_adv.Remove((origine.x - 1, origine.y - 1));
+                        if (meilleur.dir_vert == 0 && meilleur.dir_hor == 1)
+                            pion_adv.Remove((origine.x + 1, origine.y - 1));
+                        if (meilleur.dir_vert == 1 && meilleur.dir_hor == 0)
+                            pion_adv.Remove((origine.x - 1, origine.y + 1));
+                        if (meilleur.dir_vert == 1 && meilleur.dir_hor == 1)
+                            pion_adv.Remove((origine.x + 1, origine.y + 1));
+
+                    }
+
+                    int A = pion_IA.IndexOf((origine.x, origine.y));
+                    if (A != -1)
+                        pion_IA[A] = (destination.x, destination.y);
+                    else
+                        textBox4.Text = "probleme IA";
+
+                   textBox3.Text = String.Join(Environment.NewLine, list_coup_a_jouer);
+
+                    re_manger = false;
+                    if(meilleur.mange == true)
+                        re_manger = verif_manger(destination.x, destination.y, equipe_IA);
+
                 }
-
-
-                (int x, int y) origine = (meilleur.x, meilleur.y);
-                destination = (0,0);
-
-
-                if (meilleur.mange == false)
-                {
-                    destination = (meilleur.x + 1, meilleur.y + 1);
-
-                    if (meilleur.dir_vert == 0)
-                        destination.y = meilleur.y - 1;
-                    if (meilleur.dir_hor == 0)
-                        destination.x = meilleur.x - 1;
-                }
-                if (meilleur.mange == true)
-                {
-                    destination = (meilleur.x + 2, meilleur.y + 2);
-
-                    if (meilleur.dir_vert == 0)
-                        destination.y = meilleur.y - 2;
-                    if (meilleur.dir_hor == 0)
-                        destination.x = meilleur.x - 2;
-
-
-                    if(meilleur.dir_vert == 0 && meilleur.dir_hor == 0)
-                        pion_adv.Remove((origine.x-1, origine.y-1));
-                    if (meilleur.dir_vert == 0 && meilleur.dir_hor == 1)
-                        pion_adv.Remove((origine.x + 1, origine.y - 1));
-                    if (meilleur.dir_vert == 1 && meilleur.dir_hor == 0)
-                        pion_adv.Remove((origine.x - 1, origine.y + 1));
-                    if (meilleur.dir_vert == 1 && meilleur.dir_hor == 1)
-                        pion_adv.Remove((origine.x + 1, origine.y + 1));
-
-
-                }
-
-
-                int A = pion_IA.IndexOf((origine.x, origine.y));
-                pion_IA[A] = (destination.x, destination.y);
+                while (re_manger == true);
 
 
 
@@ -215,7 +236,11 @@ namespace New_LittleFish
                     }
                     else if (dir[1] == 2 && dir[2] == 0)
                     {
-                        prochain = ((3, pion.x, pion.y, dir_vert, dir_hor, true));   // mange au moins 1;
+                        prochain = ((5, pion.x, pion.y, dir_vert, dir_hor, true));   // mange au moins 1;
+                    }
+                    else if (dir[1] == 0 && dir[2] == 1 && dir[3] == 2)
+                    {
+                        prochain = ((3, pion.x, pion.y, dir_vert, dir_hor, false));   // protege un autre pion;
                     }
                     else
                         prochain = ((-1, pion.x, pion.y, dir_vert, dir_hor, false));   // pas possible de jouer

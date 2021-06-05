@@ -69,3 +69,16 @@ C'est un programme de jeu de Dame graphique en C# , avec reprise de l'IA d'origi
 
 	5 heures de développement.
 
+
+06/06/2021
+	
+	Ecriture IA
+		
+	Respect de toutes les regles concernant les pions
+
+	ajout interface, fin de partie, logo
+
+	IA suffisament inteligente pour battre un humain faible
+
+
+	3 heures de développement.

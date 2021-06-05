@@ -78,7 +78,7 @@ namespace New_LittleFish
             }
 
             Joue_un_coup();
-
+            textBox5.Text = "Joueur: Sélection d'un pion";
 
         }
 
@@ -95,6 +95,7 @@ namespace New_LittleFish
         bool select = false;
         bool vas_y = false;
         bool manger = false;
+        bool re_manger = false;
         int A_old;
         int B_old;
 
@@ -102,7 +103,7 @@ namespace New_LittleFish
         int souris_y;
 
         int case_x,  case_y ;
-        int case_x_old, case_y_old;
+        int case_x_old, case_y_old, case_x_old1, case_y_old1;
 
         private void Form1_Click(object sender, EventArgs e)
         {
@@ -122,6 +123,9 @@ namespace New_LittleFish
 
                     if ((A != -1 || B != -1) && select == false) // selection d'un pion, sur une case non-vide
                     {
+
+
+
                         A_old = A;
                         B_old = B;
 
@@ -131,69 +135,117 @@ namespace New_LittleFish
                         select_pion = (case_x, case_y);
                         select = true;
                         this.Refresh();
+
+
+
+                        textBox5.Text = "Joueur: Sélection case d'arrivée";
                     }
-                    else if ((A == -1 && B == -1) && select == true) // selection case d'arivée, sur case vide
+                    else  if ((A == -1 && B == -1) && select == true) // selection case d'arivée, sur case vide
                     {
+
+                        case_x_old1 = case_x;
+                        case_y_old1 = case_y;
+
+                        if (A_old == -1)
+                        {
+                            (case_x_old, case_y_old) = pion_blanc[B_old];
+                        }
+                        if (B_old == -1)
+                        {
+                            (case_x_old, case_y_old) = pion_noir[A_old];
+                        }
+
 
 
                         vas_y = false;
                         manger = false;
                         vas_y = verif_case_noire(case_x, case_y);
-                        manger = verif_manger(case_x, case_y);
+                        manger = verif_manger(case_x_old, case_y_old, equipe);
                         vas_y = verif_deplacement(case_x, case_y);
+
+
+                        if (manger == true)
+                        {
+                            manger_pion(equipe, case_x, case_y, case_x_old, case_y_old);
+                        }
 
 
                         if (vas_y == true)
                         {
-                            if (A_old == -1) 
-                            { 
-                                (case_x_old, case_y_old) = pion_blanc[B_old];
+                            if (A_old == -1)
+                            {
                                 pion_blanc[B_old] = (case_x, case_y);
                             }
                             if (B_old == -1)
                             {
-                                (case_x_old, case_y_old) = pion_noir[A_old];
                                 pion_noir[A_old] = (case_x, case_y);
                             }
 
 
-                            select_pion = (0, 0);
+
+                            re_manger = false;
+
+                            if (manger == true)
+                            {
+                                textBox5.Text = "Joueur: Continuez à manger";
+                                select_pion = (case_x, case_y);
+
+                                this.Refresh();
 
 
-                            select = false;
-                            manger = false;
-                            this.Refresh();
+                                re_manger = verif_manger(case_x, case_y, equipe);
+                            }
 
-                            
-                            C_a_qui = equipe_IA;
-                            Joue_un_coup();
-                            meilleur = (-1, 0, 0, 0, 0, false);
+                            if (manger == false || re_manger == false)
+                            {
+                                select = false;
+                                manger = false;
+
+                                select_pion = (0, 0);
+
+                                C_a_qui = equipe_IA;
+                                Joue_un_coup();
+
+                                this.Refresh();
+
+                                textBox5.Text = "Joueur: Sélection d'un pion";
+                            }
+
 
                         }
-                        else
-                        {
-                            select_pion = (0, 0);
-                            select = false;
-                            this.Refresh();
-                        }
+
 
                     }
-                    else // annule déplacement, si re-clique sur case ocuppée.
+                    else
                     {
                         select_pion = (0, 0);
                         select = false;
                         this.Refresh();
+
+                        textBox5.Text = "Probleme";
                     }
 
-
-
                 }
+                else // annule déplacement, si re-clique sur case ocuppée.
+                {
+                    select_pion = (0, 0);
+                    select = false;
+                    this.Refresh();
+
+                    textBox5.Text = "Case occupée";
+                }
+
+
             }
 
+            this.Refresh();
 
             Joue_un_coup();
 
 
+
+
+            verif_fin_partie(sender, e);
 
 
         }
@@ -283,12 +335,10 @@ namespace New_LittleFish
             if (vas_y == true)
             {
 
-
-
                 Graphics g = e.Graphics;
                 Pen p = new Pen(Brushes.Orange, 2);
                 p.StartCap = System.Drawing.Drawing2D.LineCap.ArrowAnchor;
-                g.DrawLine(p, case_x * taille_case + taille_case / 2, case_y * taille_case + taille_case / 2, case_x_old * taille_case + taille_case / 2, case_y_old * taille_case + taille_case / 2);
+                g.DrawLine(p, case_x_old1 * taille_case + taille_case / 2, case_y_old1 * taille_case + taille_case / 2, case_x_old * taille_case + taille_case / 2, case_y_old * taille_case + taille_case / 2);
 
             }
             if(meilleur.poids != -1)
@@ -321,6 +371,16 @@ namespace New_LittleFish
         }
 
         int equipe_IA = 0; // blanc
+
+        private void textBox3_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {

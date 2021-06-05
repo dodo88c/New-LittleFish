@@ -83,77 +83,123 @@ namespace New_LittleFish
         }
 
 
-        private bool verif_manger(int x, int y)  // regarde et élimine un pion mangé
+        private bool verif_manger(int x, int y, int equipe_mange)  // regarde et élimine un pion mangé
         {
             bool miam = false;
 
+            if (equipe_mange == 0) // blanc
+            {
+                int exist1 = pion_noir.IndexOf((x + 1, y + 1)); // mange derriere droite
+                int exist2 = pion_noir.IndexOf((x + 1, y - 1)); // mange  gauche
+                int exist3 = pion_noir.IndexOf((x - 1, y + 1)); // mange avant droite
+                int exist4 = pion_noir.IndexOf((x - 1, y - 1)); // mange avant gauche
+
+                int vide1 = pion_noir.IndexOf((x + 2, y + 2)) + pion_blanc.IndexOf((x + 2, y + 2));
+                int vide2 = pion_noir.IndexOf((x + 2, y - 2)) + pion_blanc.IndexOf((x + 2, y - 2));
+                int vide3 = pion_noir.IndexOf((x - 2, y + 2)) + pion_blanc.IndexOf((x - 2, y + 2));
+                int vide4 = pion_noir.IndexOf((x - 2, y - 2)) + pion_blanc.IndexOf((x - 2, y - 2));
+
+
+                if (exist1 != -1 && vide1 == -2 && x < 8 && y < 8)
+                {
+                    miam = true;
+                }
+                if (exist2 != -1 && vide2 == -2 && x < 8 && y > 1)
+                {
+                    miam = true;
+                }
+                if (exist3 != -1 && vide3 == -2 && x > 1 && y < 8)
+                {
+                    miam = true;
+                }
+                if (exist4 != -1 && vide4 == -2 && x > 1 && y > 1)
+                {
+                    miam = true;
+                }
+
+            }
+
+            if (equipe_mange == 1) // noir
+            {
+                int exist1 = pion_blanc.IndexOf((x + 1, y + 1)); // mange avant droite
+                int exist2 = pion_blanc.IndexOf((x + 1, y - 1)); // mange deriere droit
+                int exist3 = pion_blanc.IndexOf((x - 1, y + 1)); // mange avant gauche
+                int exist4 = pion_blanc.IndexOf((x - 1, y - 1)); // mange derriere gauche
+
+                int vide1 = pion_noir.IndexOf((x + 2, y + 2)) + pion_blanc.IndexOf((x + 2, y + 2));
+                int vide2 = pion_noir.IndexOf((x + 2, y - 2)) + pion_blanc.IndexOf((x + 2, y - 2));
+                int vide3 = pion_noir.IndexOf((x - 2, y + 2)) + pion_blanc.IndexOf((x - 2, y + 2));
+                int vide4 = pion_noir.IndexOf((x - 2, y - 2)) + pion_blanc.IndexOf((x - 2, y - 2));
+
+                if (exist1 != -1 && vide1 == -2 && x < 8 && y < 8)
+                {
+                    miam = true;
+                }
+                if (exist2 != -1 && vide2 == -2 && x < 8  && y > 1)
+                {
+                    miam = true;
+                }
+                if (exist3 != -1 && vide3 == -2 && x > 1 && y < 8)
+                {
+                    miam = true;
+                }
+                if (exist4 != -1 && vide4 == -2 && x > 1 && y > 1)
+                {
+                    miam = true;
+                }
+
+            }
+
+            return miam;
+        }
+
+
+
+
+        private void manger_pion(int equipe, int pion_x, int pion_y, int pion_old_x, int pion_old_y)  // regarde et élimine un pion mangé
+        {
+
+            
             if (equipe == 0) // blanc
             {
-                int exist1 = pion_noir.IndexOf((select_pion.x + 1, select_pion.y + 1)); // mange derriere droite
-                int exist2 = pion_noir.IndexOf((select_pion.x + 1, select_pion.y - 1)); // mange  gauche
-                int exist3 = pion_noir.IndexOf((select_pion.x - 1, select_pion.y + 1)); // mange avant droite
-                int exist4 = pion_noir.IndexOf((select_pion.x - 1, select_pion.y - 1)); // mange avant gauche
-
-                int vide1 = pion_noir.IndexOf((select_pion.x + 2, select_pion.y + 2)) + pion_blanc.IndexOf((select_pion.x + 2, select_pion.y + 2));
-                int vide2 = pion_noir.IndexOf((select_pion.x + 2, select_pion.y - 2)) + pion_blanc.IndexOf((select_pion.x + 2, select_pion.y - 2));
-                int vide3 = pion_noir.IndexOf((select_pion.x - 2, select_pion.y + 2)) + pion_blanc.IndexOf((select_pion.x - 2, select_pion.y + 2));
-                int vide4 = pion_noir.IndexOf((select_pion.x - 2, select_pion.y - 2)) + pion_blanc.IndexOf((select_pion.x - 2, select_pion.y - 2));
 
 
-                if (exist1 != -1 && vide1 == -2)
+                if (pion_x + 2 == pion_old_x  && pion_y + 2 == pion_old_y)
                 {
-                    miam = true;
-                    pion_noir.Remove((select_pion.x + 1, select_pion.y + 1));
+                    pion_noir.Remove((pion_x + 1, pion_y + 1));
                 }
-                if (exist2 != -1 && vide2 == -2)
+                if (pion_x + 2 == pion_old_x && pion_y - 2 == pion_old_y)
                 {
-                    miam = true;
-                    pion_noir.Remove((select_pion.x + 1, select_pion.y - 1));
+                    pion_noir.Remove((pion_x + 1, pion_y - 1));
                 }
-                if (exist3 != -1 && vide3 == -2)
+                if (pion_x - 2 == pion_old_x && pion_y + 2 == pion_old_y)
                 {
-                    miam = true;
-                    pion_noir.Remove((select_pion.x - 1, select_pion.y + 1));
+                    pion_noir.Remove((pion_x - 1, pion_y + 1));
                 }
-                if (exist4 != -1 && vide4 == -2)
+                if (pion_x - 2 == pion_old_x && pion_y - 2 == pion_old_y)
                 {
-                    miam = true;
-                    pion_noir.Remove((select_pion.x - 1, select_pion.y - 1));
+                    pion_noir.Remove((pion_x - 1, pion_y - 1));
                 }
 
             }
 
             if (equipe == 1) // noir
             {
-                int exist1 = pion_blanc.IndexOf((select_pion.x + 1, select_pion.y + 1)); // mange avant droite
-                int exist2 = pion_blanc.IndexOf((select_pion.x + 1, select_pion.y - 1)); // mange avant gauche
-                int exist3 = pion_blanc.IndexOf((select_pion.x - 1, select_pion.y + 1)); // mange derriere droite
-                int exist4 = pion_blanc.IndexOf((select_pion.x - 1, select_pion.y - 1)); // mange derriere gauche
-
-                int vide1 = pion_noir.IndexOf((select_pion.x + 2, select_pion.y + 2)) + pion_blanc.IndexOf((select_pion.x + 2, select_pion.y + 2));
-                int vide2 = pion_noir.IndexOf((select_pion.x + 2, select_pion.y - 2)) + pion_blanc.IndexOf((select_pion.x + 2, select_pion.y - 2));
-                int vide3 = pion_noir.IndexOf((select_pion.x - 2, select_pion.y + 2)) + pion_blanc.IndexOf((select_pion.x - 2, select_pion.y + 2));
-                int vide4 = pion_noir.IndexOf((select_pion.x - 2, select_pion.y - 2)) + pion_blanc.IndexOf((select_pion.x - 2, select_pion.y - 2));
-
-                if (exist1 != -1 && vide1 == -2)
+                if (pion_x + 2 == pion_old_x && pion_y + 2 == pion_old_y)
                 {
-                    miam = true;
-                    pion_blanc.Remove((select_pion.x + 1, select_pion.y + 1));
+                    pion_blanc.Remove((pion_x + 1, pion_y + 1));
                 }
-                if (exist2 != -1 && vide2 == -2)
+                if (pion_x + 2 == pion_old_x && pion_y - 2 == pion_old_y)
                 {
-                    miam = true;
-                    pion_blanc.Remove((select_pion.x + 1, select_pion.y - 1));
+                    pion_blanc.Remove((pion_x + 1, pion_y - 1));
                 }
-                if (exist3 != -1 && vide3 == -2)
+                if (pion_x - 2 == pion_old_x && pion_y + 2 == pion_old_y)
                 {
-                    miam = true;
-                    pion_blanc.Remove((select_pion.x - 1, select_pion.y + 1));
+                    pion_blanc.Remove((pion_x - 1, pion_y + 1));
                 }
-                if (exist4 != -1 && vide4 == -2)
+                if (pion_x - 2 == pion_old_x && pion_y - 2 == pion_old_y)
                 {
-                    miam = true;
-                    pion_blanc.Remove((select_pion.x - 1, select_pion.y - 1));
+                    pion_blanc.Remove((pion_x - 1, pion_y - 1));
                 }
             }
 
@@ -162,14 +208,41 @@ namespace New_LittleFish
             textBox1.Text = pion_noir.Count.ToString();
             textBox2.Text = pion_blanc.Count.ToString();
 
-            return miam;
+            this.Refresh();
+
         }
 
 
 
 
 
+
+
+
+
+
+
+
+        private void verif_fin_partie(object sender, EventArgs e)
+        {
+
+            if(pion_noir.Count == 0)
+            {
+                textBox4.Text = "Fin de partie, les Noirs Gagnent";
+                Form1_Load(sender, e);
+            }
+
+            if (pion_blanc.Count == 0)
+            {
+                textBox4.Text = "Fin de partie, les Blanc Gagnent";
+                Form1_Load(sender, e);
+            }
+
+        }
+
+
     }
+
 
 
 }
