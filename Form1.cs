@@ -101,6 +101,9 @@ namespace New_LittleFish
         int souris_x;
         int souris_y;
 
+        int case_x,  case_y ;
+        int case_x_old, case_y_old;
+
         private void Form1_Click(object sender, EventArgs e)
         {
 
@@ -109,8 +112,8 @@ namespace New_LittleFish
 
                 if (souris_x < (taille_grille * taille_case) && souris_y < (taille_grille * taille_case))
                 {
-                    int case_x = (int)souris_x / taille_case,
-                        case_y = (int)souris_y / taille_case;
+                    case_x = (int)souris_x / taille_case;
+                    case_y = (int)souris_y / taille_case;
 
 
                     int A = pion_noir.IndexOf((case_x, case_y));
@@ -142,10 +145,16 @@ namespace New_LittleFish
 
                         if (vas_y == true)
                         {
-                            if (A_old == -1)
+                            if (A_old == -1) 
+                            { 
+                                (case_x_old, case_y_old) = pion_blanc[B_old];
                                 pion_blanc[B_old] = (case_x, case_y);
+                            }
                             if (B_old == -1)
+                            {
+                                (case_x_old, case_y_old) = pion_noir[A_old];
                                 pion_noir[A_old] = (case_x, case_y);
+                            }
 
 
                             select_pion = (0, 0);
@@ -154,8 +163,11 @@ namespace New_LittleFish
                             select = false;
                             manger = false;
                             this.Refresh();
+
+                            
                             C_a_qui = equipe_IA;
                             Joue_un_coup();
+                            meilleur = (-1, 0, 0, 0, 0, false);
 
                         }
                         else
@@ -268,9 +280,26 @@ namespace New_LittleFish
 
             }
 
-            
-            
-            textBox1.Text = pion_noir.Count.ToString();
+            if (vas_y == true)
+            {
+
+
+
+                Graphics g = e.Graphics;
+                Pen p = new Pen(Brushes.Orange, 2);
+                p.StartCap = System.Drawing.Drawing2D.LineCap.ArrowAnchor;
+                g.DrawLine(p, case_x * taille_case + taille_case / 2, case_y * taille_case + taille_case / 2, case_x_old * taille_case + taille_case / 2, case_y_old * taille_case + taille_case / 2);
+
+            }
+            if(meilleur.poids != -1)
+            {
+                Graphics g = e.Graphics;
+                Pen p = new Pen(Brushes.Red, 5);
+                p.StartCap = System.Drawing.Drawing2D.LineCap.ArrowAnchor;
+                g.DrawLine(p,destination.x * taille_case+ taille_case/2, destination.y * taille_case + taille_case / 2, meilleur.x*taille_case + taille_case / 2, meilleur.y * taille_case + taille_case / 2);
+            }
+
+                textBox1.Text = pion_noir.Count.ToString();
             textBox2.Text = pion_blanc.Count.ToString();
 
 

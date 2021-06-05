@@ -55,3 +55,17 @@ C'est un programme de jeu de Dame graphique en C# , avec reprise de l'IA d'origi
 	corretion bug
 
 	1 heure de développement.
+
+
+05/06/2021 : 
+	Ecriture de l'IA :
+		-verification de tout les coups jouables à un niveau de pronfondeur
+		-attribution d'un poids à un déplacement
+		-respecte toutes les regles de jeu 
+
+	Maintenant Possible de jouer une partie.
+
+	Ajout fleche de déplacement
+
+	5 heures de développement.
+
