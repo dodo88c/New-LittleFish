@@ -34,6 +34,9 @@ namespace New_LittleFish
         List<(int x, int y)> pion_noir = new List<(int x, int y)>();
         List<(int x, int y)> pion_blanc = new List<(int x, int y)>();
 
+        List<(int x, int y)> dame_noir = new List<(int x, int y)>();
+        List<(int x, int y)> dame_blanc = new List<(int x, int y)>();
+
         (int x ,int y ) select_pion = (0,0) ;
 
 
@@ -243,7 +246,7 @@ namespace New_LittleFish
             Joue_un_coup();
 
 
-
+            verif_passage_dames();
 
             verif_fin_partie(sender, e);
 
@@ -371,6 +374,16 @@ namespace New_LittleFish
         }
 
         int equipe_IA = 0; // blanc
+
+        private void textBox6_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void newgame_Click(object sender, EventArgs e)
+        {
+            Form1_Load(sender,e);
+;       }
 
         private void textBox3_TextChanged(object sender, EventArgs e)
         {

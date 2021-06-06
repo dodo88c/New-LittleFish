@@ -135,7 +135,7 @@ namespace New_LittleFish
                 {
                     miam = true;
                 }
-                if (exist2 != -1 && vide2 == -2 && x < 8  && y > 1)
+                if (exist2 != -1 && vide2 == -2 && x < 8 && y > 1)
                 {
                     miam = true;
                 }
@@ -159,12 +159,12 @@ namespace New_LittleFish
         private void manger_pion(int equipe, int pion_x, int pion_y, int pion_old_x, int pion_old_y)  // regarde et élimine un pion mangé
         {
 
-            
+
             if (equipe == 0) // blanc
             {
 
 
-                if (pion_x + 2 == pion_old_x  && pion_y + 2 == pion_old_y)
+                if (pion_x + 2 == pion_old_x && pion_y + 2 == pion_old_y)
                 {
                     pion_noir.Remove((pion_x + 1, pion_y + 1));
                 }
@@ -226,23 +226,76 @@ namespace New_LittleFish
         private void verif_fin_partie(object sender, EventArgs e)
         {
 
-            if(pion_noir.Count == 0)
+            if (pion_noir.Count == 0)
             {
-                textBox4.Text = "Fin de partie, les Noirs Gagnent";
+                textBox4.Text = "Fin de partie, les Blancs Gagnent";
                 Form1_Load(sender, e);
             }
 
             if (pion_blanc.Count == 0)
             {
-                textBox4.Text = "Fin de partie, les Blanc Gagnent";
+                textBox4.Text = "Fin de partie, les Noirs Gagnent";
                 Form1_Load(sender, e);
             }
 
         }
 
 
+
+
+        private void verif_passage_dames()
+        {
+
+            int x1 = -1, y1 = -1;
+            int x2 = -1, y2 = -1;
+
+            foreach ((int x, int y) pion in pion_blanc)
+            {
+
+                if( pion.y == 0)
+                {
+                    y1 = pion.y;
+                    x1 = pion.x;                                        
+                }
+            }
+            foreach ((int x, int y) pion in pion_noir)
+            {
+                if ( pion.y == 9)
+                {
+                    y2 = pion.y;
+                    x2 = pion.x;
+                }
+            }
+
+
+            if(y1 != -1)
+            {
+                pion_blanc.Remove((x1, y1));
+                dame_blanc.Add((x1, y1));
+
+            }
+            if(y2 != - 1)
+            {
+                pion_noir.Remove((x2, y2));
+                dame_noir.Add((x2, y2));
+
+            }
+
+
+            textBox6.Text = dame_blanc.Count.ToString();
+            textBox2.Text = pion_blanc.Count.ToString();
+            textBox7.Text = dame_noir.Count.ToString();
+            textBox1.Text = pion_noir.Count.ToString();
+
+            this.Refresh();
+
+        }
+
+
+
+
+
+
     }
-
-
 
 }

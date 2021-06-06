@@ -82,3 +82,11 @@ C'est un programme de jeu de Dame graphique en C# , avec reprise de l'IA d'origi
 
 
 	3 heures de développement.
+
+
+06/06/2021
+
+	rectification diverse
+	passage pions en dames
+
+	1 heures de développement.
